@@ -1,0 +1,89 @@
+.container {
+  position: fixed;
+  z-index: 100000000;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: backdrop-filter 0.5s ease;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  color: white;
+}
+
+.container.isVisible {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+}
+
+.checkDiv {
+  background-color: rgba(26, 26, 46, 0.9);
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px; 
+  padding: 40px 60px; 
+  border-radius: 20px; 
+  border: 4px solid black; 
+  max-width: 900px; 
+  
+  font-size: 20px; 
+  line-height: 24px; 
+  
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: 0.15s;
+}
+
+.container.isVisible .checkDiv {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.autor {
+  align-self: flex-end;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.input-checkout{
+    border-radius: 5px;
+/* background: transparent; */
+border: none;
+/* box-sizing: border-box; */
+  outline: none;
+}
+
+.PayButton{
+    min-width: 200px;
+    min-height: 40px;
+    display: flex;
+    /* text-align: center; */
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #4ade80;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 0px 10px 0px 10px;
+}
+
+.PayButton:hover {
+  background-color: rgba(74, 222, 128, 0.7);
+}
+
+.PayButton.disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgb(127, 120, 120);
+}
+
+/* .dark{
+    background-color: black;
+} */
+
+

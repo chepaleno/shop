@@ -1,0 +1,128 @@
+.cart-container {
+  /* max-width: 1200px; */
+
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.cart-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  /* .products-grid {flex-grow: 1;} */
+  /* .pay-menu { flex-grow: 1;} */
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.products-grid-cart {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  /* min-width: 700px; */
+  /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
+  border-radius: 20px;
+  gap: 20px;
+}
+
+.pay-menu {
+  height: 196px;
+  width: 400px;
+  border-radius: 10px;
+  background-color: #16213e;
+  color: white;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.sum-of-products {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.photo-of-products {
+  margin-top: 15px;
+  /* gap: 10px; */
+  display: flex;
+  /* background-color: #1a1a2e; */
+  /* grid-row: 2; */
+  margin-right: 15px;
+  gap: 10px;
+  /* justify-content: space-between; */
+}
+
+.mini-photo-of-products {
+  background-color: #1a1a2e;
+  padding: 5px;
+  border-radius: 10px;
+  max-height: 64px;
+  max-width: 48px;
+}
+
+.pay-button {
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  background-color: #4ade80;
+  margin-right: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}
+
+.menuButton{
+   text-decoration: none;
+}
+.pay-button:hover {
+  cursor: pointer;
+  background-color: #22c55e;
+}
+.close-menu{
+  margin-top: 250px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  /* justify-content: center; */
+  color: white;
+  gap: 10px;
+}
+
+.empty-cart-header{
+    font-size: 23px;
+  font-weight: 700;
+}
+
+.empty-cart-main{
+  font-size: 15px;
+}
+
+.empty-cart-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: #16213e;
+  font-size: 17px;
+  margin-top: 12px;
+  height: 52px;
+  width: 380px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.empty-cart-button:hover {
+  background-color: #16224b;
+}
+
+.link-empty-cart{
+color: white;
+text-decoration: none;
+}
