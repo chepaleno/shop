@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { ShopProvider } from "./components/context/ShopContext.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 (function () {
   const redirect = sessionStorage.redirect;
   delete sessionStorage.redirect;
@@ -13,10 +16,12 @@ import { ShopProvider } from "./components/context/ShopContext.tsx";
 })();
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter basename="/shop">
-    <ShopProvider>
-      <StrictMode>
-        <App />
-      </StrictMode>
-    </ShopProvider>
+    <QueryClientProvider client={queryClient}>
+      <ShopProvider>
+        <StrictMode>
+          <App />
+        </StrictMode>
+      </ShopProvider>
+    </QueryClientProvider>
   </BrowserRouter>,
 );

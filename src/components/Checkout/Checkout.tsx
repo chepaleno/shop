@@ -1,40 +1,55 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import "./Checkout.css";
 import { useShop } from "../context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { checkoutSchema, type CheckOutFromData } from "../../validation";
 // import { useShop } from "../context/ShopContext";
 interface CheckOutInterface {
   finalPrice: string;
+  setIsOpenCheckout: Dispatch<SetStateAction<boolean>>;
 }
 
 const Checkout = (props: CheckOutInterface) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(checkoutSchema),
+  });
   const { setCart } = useShop();
-  const { finalPrice } = props;
+  const { finalPrice, setIsOpenCheckout } = props;
   //   console.log(typeof finalPrice);
 
-  const onClick = () => {
-    if (!isValid || loading) return;
-    setIsLoading(true);
+  const onSubmit = async (data: CheckOutFromData) => {
+    if (isSubmitting) return;
+    // setIsLoading(true);
     const payload = {
-      name: nameInput,
-      phone: telephoneInput,
+      name: data.name,
+      phone: data.phone,
       total: finalPrice,
     };
     console.log("Отправка на сервер:", payload);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-    }, 2000);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log("qwe");
+    setIsSuccess(true);
+    // setCart([]);
   };
+
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState(false);
-  const [nameInput, setNameInput] = useState<string>("");
-  const [telephoneInput, setTelephoneInput] = useState<string>("");
-  const [loading, setIsLoading] = useState<boolean>(false);
-//   console.log(nameInput);
-//   console.log(telephoneInput);
-  const isValid =
-    nameInput.trim().length > 0 && telephoneInput.trim().length > 0;
+  const onClick = () => {
+    setIsOpenCheckout(false);
+  };
+  // const [nameInput, setNameInput] = useState<string>("");
+  // const [telephoneInput, setTelephoneInput] = useState<string>("");
+  // const [loading, setIsLoading] = useState<boolean>(false);
+  //   console.log(nameInput);
+  //   console.log(telephoneInput);
+  // const isValid =
+  // nameInput.trim().length > 0 && telephoneInput.trim().length > 0;
   return isSuccess ? (
     <div className="container isVisible">
       <div className="checkDiv">
@@ -48,8 +63,8 @@ const Checkout = (props: CheckOutInterface) => {
         <div
           className="PayButton"
           onClick={() => {
-            setCart([]); 
-            navigate("/")
+            setCart([]);
+            navigate("/");
           }}
         >
           Вернуться в каталог
@@ -65,26 +80,37 @@ const Checkout = (props: CheckOutInterface) => {
           <input
             type="text"
             className="input-checkout"
-            value={nameInput}
-            onChange={(e) => setNameInput(e.target.value)}
+            // value={nameInput}
+            // onChange={(e) => setNameInput(e.target.value)}
+            {...register("name")}
           />
+          {errors.name && (
+            <span style={{ color: "red" }}>{errors.name.message}</span>
+          )}
         </div>
         <div className="telephone-checkout">
           Телефон:
           <input
             type="text"
             className="input-checkout"
-            value={telephoneInput}
-            onChange={(e) => setTelephoneInput(e.target.value)}
+            // value={telephoneInput}
+            // onChange={(e) => setTelephoneInput(e.target.value)}
+            {...register("phone")}
           />
+          {errors.phone && (
+            <span style={{ color: "red" }}>{errors.phone.message}</span>
+          )}
         </div>
         <span className="autor">made by: Микро Ивашка</span>
         <div
           //   className={` PayButton ${isValid ? "" : "disabled"}`}
-          className={`PayButton ${!isValid || loading ? "disabled" : ""}`}
-          onClick={onClick}
+          className={`PayButton ${isSubmitting ? "disabled" : ""}`}
+          onClick={handleSubmit(onSubmit)}
         >
-          {loading ? `Пожалуйста подождите` : `Оплатить ${finalPrice} $`}
+          {isSubmitting ? `Пожалуйста подождите` : `Оплатить ${finalPrice} $`}
+        </div>
+        <div onClick={onClick} className="close-button">
+          Закрыть
         </div>
       </div>
     </div>

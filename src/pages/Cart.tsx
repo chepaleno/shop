@@ -74,7 +74,7 @@ const Cart = () => {
           {/* </a> */}
         </div>
       </div>
-      {isOpenCheckout ? <Checkout finalPrice={finalPrice} /> : null}
+      {isOpenCheckout ? <Checkout finalPrice={finalPrice} setIsOpenCheckout={setIsOpenCheckout} /> : null}
     </div>
   ) : (
     <div className="close-menu">

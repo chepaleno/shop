@@ -1,13 +1,22 @@
-export const getProducts = async () => {
-  try {
-    const url = `https://fakestoreapi.com/products`;
+import type { CartItem } from "../../types";
 
-    const response = await fetch(url);
-    const data = await response.json();
-    // console.log(data);
+export const getProducts = async (): Promise<CartItem[]> => {
+  // try {
+  //   const url = `https://fakestoreapi.com/products`;
 
-    return data;
-  } catch (error) {
-    // console.log("qwe");
+  //   const response = await fetch(url);
+  //   const data = await response.json();
+  //   // console.log(data);
+
+  //   return data;
+  // } catch (error) {
+  //   // console.log("qwe");
+  // }
+  const response = await fetch(`https://fakestoreapi.com/products`);
+
+  if (!response.ok) {
+    throw new Error("Не удалось загрузить товары");
   }
+
+  return response.json();
 };
