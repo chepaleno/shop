@@ -36,6 +36,8 @@ const Checkout = (props: CheckOutInterface) => {
   const sendOrder = async (formData: CheckOutFromData) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    console.log("Данные заказа успешно сохранены в БД:", formData);
+
     return { success: true, orderId: Date.now() };
   };
 
