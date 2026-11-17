@@ -1,11 +1,11 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import "./Checkout.css";
 import { useShop } from "../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutSchema, type CheckOutFromData } from "../../validation";
-// import { useShop } from "../context/ShopContext";
+import { useMutation } from "@tanstack/react-query";
 interface CheckOutInterface {
   finalPrice: string;
   setIsOpenCheckout: Dispatch<SetStateAction<boolean>>;
@@ -15,41 +15,40 @@ const Checkout = (props: CheckOutInterface) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(checkoutSchema),
   });
   const { setCart } = useShop();
   const { finalPrice, setIsOpenCheckout } = props;
-  //   console.log(typeof finalPrice);
 
-  const onSubmit = async (data: CheckOutFromData) => {
-    if (isSubmitting) return;
-    // setIsLoading(true);
+  const onSubmit = async (formData: CheckOutFromData) => {
     const payload = {
-      name: data.name,
-      phone: data.phone,
+      name: formData.name,
+      phone: formData.phone,
       total: finalPrice,
     };
     console.log("Отправка на сервер:", payload);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("qwe");
-    setIsSuccess(true);
-    // setCart([]);
+
+    mutate(payload);
   };
 
+  const sendOrder = async (formData: CheckOutFromData) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    return { success: true, orderId: Date.now() };
+  };
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: sendOrder,
+    onSuccess: () => {},
+  });
+
   const navigate = useNavigate();
-  const [isSuccess, setIsSuccess] = useState(false);
   const onClick = () => {
     setIsOpenCheckout(false);
   };
-  // const [nameInput, setNameInput] = useState<string>("");
-  // const [telephoneInput, setTelephoneInput] = useState<string>("");
-  // const [loading, setIsLoading] = useState<boolean>(false);
-  //   console.log(nameInput);
-  //   console.log(telephoneInput);
-  // const isValid =
-  // nameInput.trim().length > 0 && telephoneInput.trim().length > 0;
+
   return isSuccess ? (
     <div className="container isVisible">
       <div className="checkDiv">
@@ -59,7 +58,6 @@ const Checkout = (props: CheckOutInterface) => {
         </p>
         <p>Ваш заказ уже собирают на складе.</p>
 
-        {/* Кнопка, которая закрывает модалку и очищает корзину */}
         <div
           className="PayButton"
           onClick={() => {
@@ -77,13 +75,7 @@ const Checkout = (props: CheckOutInterface) => {
         <h2 className="h2">Пожалуйста введите данные</h2>
         <div className="name-checkout">
           Имя:
-          <input
-            type="text"
-            className="input-checkout"
-            // value={nameInput}
-            // onChange={(e) => setNameInput(e.target.value)}
-            {...register("name")}
-          />
+          <input type="text" className="input-checkout" {...register("name")} />
           {errors.name && (
             <span style={{ color: "red" }}>{errors.name.message}</span>
           )}
@@ -93,8 +85,6 @@ const Checkout = (props: CheckOutInterface) => {
           <input
             type="text"
             className="input-checkout"
-            // value={telephoneInput}
-            // onChange={(e) => setTelephoneInput(e.target.value)}
             {...register("phone")}
           />
           {errors.phone && (
@@ -103,11 +93,10 @@ const Checkout = (props: CheckOutInterface) => {
         </div>
         <span className="autor">made by: Микро Ивашка</span>
         <div
-          //   className={` PayButton ${isValid ? "" : "disabled"}`}
-          className={`PayButton ${isSubmitting ? "disabled" : ""}`}
+          className={`PayButton ${isPending ? "disabled" : ""}`}
           onClick={handleSubmit(onSubmit)}
         >
-          {isSubmitting ? `Пожалуйста подождите` : `Оплатить ${finalPrice} $`}
+          {isPending ? `Пожалуйста подождите` : `Оплатить ${finalPrice} $`}
         </div>
         <div onClick={onClick} className="close-button">
           Закрыть
